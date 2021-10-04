@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 /**
  * @author Mantas Brasiunas, mantas@brasiunas.lt
- * @version 2021-10-03
+ * @version 2021-10-04
  */
 public class WordsCounter implements Runnable {
 	private String fileName;

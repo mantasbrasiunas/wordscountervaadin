@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.InputStream;
 /**
  * @author Mantas Brasiunas, mantas@brasiunas.lt
- * @version 2021-10-03
+ * @version 2021-10-04
  */
 public class WordsCountersManager {
 	private void shutdownWordsCounters(WordsCounter[] wordsCounters, 

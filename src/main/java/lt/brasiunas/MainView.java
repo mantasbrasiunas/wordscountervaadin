@@ -16,12 +16,19 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Set;
 
+/**
+ * @author Mantas Brasiunas, mantas@brasiunas.lt
+ * @version 2021-10-04
+ */
 @Route
 public class MainView extends VerticalLayout {
-
-	private void createResultElements(ArrayList<TextArea> txasWords,
-			ArrayList<Button> btnsDownload,
-			char[][] firstLetters) {
+	private ArrayList<TextArea> txasWords;
+	private Button btnDownloadAll;
+	private ArrayList<Button> btnsDownload;
+	private char[][] firstLetters = { { 'a', 'g'}, { 'h', 'n'}, { 'o', 'u'}, 
+		{ 'v', 'z'} };
+	
+	private void createResultElements() {
 		txasWords = new ArrayList<>();
         btnsDownload = new ArrayList<>();
         for (int i = 0; i < firstLetters.length; i++) {
@@ -37,9 +44,7 @@ public class MainView extends VerticalLayout {
 			btnsDownload.add(btnDownload);
 		}
 		
-		for (int i = 0; i < firstLetters.length; i++) {
-			add(txasWords.get(i), btnsDownload.get(i));
-		}
+		
 	}
 	
 	private Button createBtnBegin(MultiFileMemoryBuffer mfmb) {
@@ -56,7 +61,10 @@ public class MainView extends VerticalLayout {
 				WordsCountersManager wcm = new WordsCountersManager();
 				WordsStatistics ws = wcm.countWords(inputStreams);
 				
-				
+				btnDownloadAll.setEnabled(true);
+				for (Button btn : btnsDownload) {
+					btn.setEnabled(true);
+				}
 				System.out.println(ws);
 			});
 		} else {
@@ -72,10 +80,13 @@ public class MainView extends VerticalLayout {
 	}
 	
     public MainView() {
-		ArrayList<TextArea> txasWords = null;
-		ArrayList<Button> btnsDownload = null;
-		char[][] firstLetters = { { 'a', 'g'}, { 'h', 'n'}, { 'o', 'u'}, 
-			{ 'v', 'z'}, };
+		//ArrayList<TextArea> txasWords = null;
+		//ArrayList<Button> btnsDownload = null;
+		//char[][] firstLetters = { { 'a', 'g'}, { 'h', 'n'}, { 'o', 'u'}, 
+		//	{ 'v', 'z'} };
+		
+		createResultElements();
+		
 		
 		MultiFileMemoryBuffer mfmb = new MultiFileMemoryBuffer();
         Button btnBegin = createBtnBegin(mfmb);
@@ -86,15 +97,15 @@ public class MainView extends VerticalLayout {
 			btnBegin.setEnabled(true);
 		});
         
-        Button btnDownloadAll = new Button("Download all");
+        btnDownloadAll = new Button("Download all");
         btnDownloadAll.setEnabled(false);
         
         add(upload, btnBegin, btnDownloadAll);
         
-        createResultElements(txasWords, btnsDownload, firstLetters);
         
         
-        
-        
+        for (int i = 0; i < firstLetters.length; i++) {
+			add(txasWords.get(i), btnsDownload.get(i));
+		}
     }
 }
