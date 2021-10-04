@@ -22,16 +22,20 @@ import java.io.IOException;
 */
 @Route
 public class MainView extends VerticalLayout {
-	private ArrayList<TextArea> txasWords;
-	private ArrayList<Button> btnsDownload;
-	private String[] firstLetters = { "a-g", "h-n", "o-u", "v-z" };
+	//private ArrayList<TextArea> txasWords;
+	//private ArrayList<Button> btnsDownload;
+	//private char[][] firstLetters = { { 'a', 'g'}, { 'h', 'n'}, { 'o', 'u'}, 
+	//	{ 'v', 'z'}, };
 	
-	private void createResultElements() {
+	private void createResultElements(ArrayList<TextArea> txasWords,
+			ArrayList<Button> btnsDownload,
+			char[][] firstLetters) {
 		txasWords = new ArrayList<>();
         btnsDownload = new ArrayList<>();
         for (int i = 0; i < firstLetters.length; i++) {
-			TextArea txaWords = new TextArea("Words frequency " + 
-				firstLetters[i]);
+			TextArea txaWords = new TextArea(String.format(
+				"Words frequency [%c-%c]", 
+				firstLetters[i][0], firstLetters[i][1]));
 			txaWords.setWidth("100%");
 			txaWords.setHeight("250px");
 			txasWords.add(txaWords);
@@ -39,8 +43,10 @@ public class MainView extends VerticalLayout {
 			Button btnDownload = new Button("Download file");
 			btnDownload.setEnabled(false);
 			btnsDownload.add(btnDownload);
-			
-			//add(txaWords, btnDownload);
+		}
+		
+		for (int i = 0; i < firstLetters.length; i++) {
+			add(txasWords.get(i), btnsDownload.get(i));
 		}
 	}
 	
@@ -57,26 +63,9 @@ public class MainView extends VerticalLayout {
 				}
 				WordsCountersManager wcm = new WordsCountersManager();
 				WordsStatistics ws = wcm.countWords(inputStreams);
-				System.out.println(ws);
-				/*
-				String[] fileNamesArray = new String[n];
-				for (String fileName : fileNamesSet) {
-					fileNamesArray[i++] = fileName;
-					InputStream is = mfmb.getInputStream(fileName);
-					try {
-						BufferedReader br = new BufferedReader(new InputStreamReader(is));
-						String line = null;
-						while ((line = br.readLine()) != null) {
-							System.out.println(line);
-						}
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				}
-				WordsCountersManager wcm = new WordsCountersManager();
-				WordsStatistics ws = wcm.countWords(fileNamesArray);
-				*/
 				
+				
+				System.out.println(ws);
 			});
 		} else {
 			Notification.show("""
@@ -91,18 +80,17 @@ public class MainView extends VerticalLayout {
 	}
 	
     public MainView() {
+		ArrayList<TextArea> txasWords = null;
+		ArrayList<Button> btnsDownload = null;
+		char[][] firstLetters = { { 'a', 'g'}, { 'h', 'n'}, { 'o', 'u'}, 
+			{ 'v', 'z'}, };
+		
 		MultiFileMemoryBuffer mfmb = new MultiFileMemoryBuffer();
         Button btnBegin = createBtnBegin(mfmb);
         
         Upload upload = new Upload(mfmb);
         
         upload.addFinishedListener(e -> {
-			/*
-			for (String fileName : fileNames) {
-				InputStream inputStream = mfmb.getInputStream(fileName);
-				System.out.println("---->" + fileName);
-			}
-			*/
 			btnBegin.setEnabled(true);
 		});
         
@@ -111,11 +99,9 @@ public class MainView extends VerticalLayout {
         
         add(upload, btnBegin, btnDownloadAll);
         
-        createResultElements();
+        createResultElements(txasWords, btnsDownload, firstLetters);
         
-        for (int i = 0; i < firstLetters.length; i++) {
-			add(txasWords.get(i), btnsDownload.get(i));
-		}
+        
         
         
     }
