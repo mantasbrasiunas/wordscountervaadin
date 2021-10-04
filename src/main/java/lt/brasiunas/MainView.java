@@ -15,18 +15,10 @@ import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Set;
-/*
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-*/
+
 @Route
 public class MainView extends VerticalLayout {
-	//private ArrayList<TextArea> txasWords;
-	//private ArrayList<Button> btnsDownload;
-	//private char[][] firstLetters = { { 'a', 'g'}, { 'h', 'n'}, { 'o', 'u'}, 
-	//	{ 'v', 'z'}, };
-	
+
 	private void createResultElements(ArrayList<TextArea> txasWords,
 			ArrayList<Button> btnsDownload,
 			char[][] firstLetters) {

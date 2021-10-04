@@ -9,7 +9,8 @@ import java.io.InputStream;
  * @version 2021-10-03
  */
 public class WordsCountersManager {
-	private void shutdownWordsCounters(WordsCounter[] wordsCounters, ExecutorService executorService) {
+	private void shutdownWordsCounters(WordsCounter[] wordsCounters, 
+			ExecutorService executorService) {
 		for (int i = 0; i < wordsCounters.length; i++) {
 			while (wordsCounters[i].isFinished() != true) {
 				System.out.println(i + " nebaigė darbo.");
