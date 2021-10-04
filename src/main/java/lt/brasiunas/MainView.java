@@ -43,8 +43,6 @@ public class MainView extends VerticalLayout {
 			btnDownload.setEnabled(false);
 			btnsDownload.add(btnDownload);
 		}
-		
-		
 	}
 	
 	private Button createBtnBegin(MultiFileMemoryBuffer mfmb) {
@@ -62,10 +60,17 @@ public class MainView extends VerticalLayout {
 				WordsStatistics ws = wcm.countWords(inputStreams);
 				
 				btnDownloadAll.setEnabled(true);
+				
+				i = 0;
+				for (TextArea txa : txasWords) {
+					txa.setValue(ws.getStatistics(firstLetters[i][0], firstLetters[i][1]));
+					i++;
+				}
 				for (Button btn : btnsDownload) {
 					btn.setEnabled(true);
 				}
-				System.out.println(ws);
+				
+				//System.out.println(ws);
 			});
 		} else {
 			Notification.show("""
@@ -79,14 +84,14 @@ public class MainView extends VerticalLayout {
         return btnBegin;
 	}
 	
+	private void addDownloadListeners() {
+		for (Button btn : btnsDownload) {
+			System.out.println("Generuoju atsisiuntimą mygtukams.");
+			
+		}
+	}
     public MainView() {
-		//ArrayList<TextArea> txasWords = null;
-		//ArrayList<Button> btnsDownload = null;
-		//char[][] firstLetters = { { 'a', 'g'}, { 'h', 'n'}, { 'o', 'u'}, 
-		//	{ 'v', 'z'} };
-		
 		createResultElements();
-		
 		
 		MultiFileMemoryBuffer mfmb = new MultiFileMemoryBuffer();
         Button btnBegin = createBtnBegin(mfmb);
@@ -102,10 +107,10 @@ public class MainView extends VerticalLayout {
         
         add(upload, btnBegin, btnDownloadAll);
         
-        
-        
         for (int i = 0; i < firstLetters.length; i++) {
 			add(txasWords.get(i), btnsDownload.get(i));
 		}
+		
+		addDownloadListeners();
     }
 }
