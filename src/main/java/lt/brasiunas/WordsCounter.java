@@ -77,7 +77,6 @@ public class WordsCounter implements Runnable {
 	}
 	
 	private void countWords(InputStream inputStream) {
-		System.out.println("InputStream");
 		try (BufferedReader br = new BufferedReader(
 					new InputStreamReader(inputStream))) {
 			result = countWords(br);
@@ -95,6 +94,5 @@ public class WordsCounter implements Runnable {
 		}
 		wordsStatistics.updateWordsFrequency(result);
 		finished = true;
-		System.out.println("---->Baigta gija.");
 	}
 }

@@ -48,8 +48,6 @@ public class WordsStatistics {
 			java.util.Map.Entry::getValue,
 			(v1, v2) -> v1, LinkedHashMap::new
 		));
-		
-		System.out.println(sortedNewMap);
 	};
 	
 	public void writeStatistics(String fileName, 

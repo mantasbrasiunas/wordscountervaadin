@@ -11,10 +11,16 @@ import com.vaadin.flow.component.upload.receivers.MultiFileBuffer;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.router.Route;
 
+import com.vaadin.flow.server.frontend.installer.DefaultFileDownloader;
+
 import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Set;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * @author Mantas Brasiunas, mantas@brasiunas.lt
@@ -63,14 +69,13 @@ public class MainView extends VerticalLayout {
 				
 				i = 0;
 				for (TextArea txa : txasWords) {
-					txa.setValue(ws.getStatistics(firstLetters[i][0], firstLetters[i][1]));
+					txa.setValue(ws.getStatistics(
+						firstLetters[i][0], firstLetters[i][1]));
 					i++;
 				}
 				for (Button btn : btnsDownload) {
 					btn.setEnabled(true);
 				}
-				
-				//System.out.println(ws);
 			});
 		} else {
 			Notification.show("""
@@ -85,8 +90,20 @@ public class MainView extends VerticalLayout {
 	}
 	
 	private void addDownloadListeners() {
+		int i = 0;
 		for (Button btn : btnsDownload) {
-			System.out.println("Generuoju atsisiuntimą mygtukams.");
+			//https://vaadin.com/docs/v8/framework/articles/LettingTheUserDownloadAFile
+			
+			DefaultFileDownloader dfd = new DefaultFileDownloader();
+			/*
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter(
+					String.format("Byla_%c_%c.txt", 
+						firstLetters[i][0], firstLetters[i][1])))) {
+				bw.write("Labas.");
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			*/
 			
 		}
 	}

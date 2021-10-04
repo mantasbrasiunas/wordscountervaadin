@@ -13,7 +13,6 @@ public class WordsCountersManager {
 			ExecutorService executorService) {
 		for (int i = 0; i < wordsCounters.length; i++) {
 			while (wordsCounters[i].isFinished() != true) {
-				System.out.println(i + " nebaigė darbo.");
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException ex) {
@@ -22,7 +21,6 @@ public class WordsCountersManager {
 			}
 		}
 		executorService.shutdown();
-		System.out.println("Baigė darbą.");
 	}
 	
 	public WordsStatistics countWords(String[] fileNames) {
