@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 /**
  * @author Mantas Brasiunas, mantas@brasiunas.lt
- * @version 2021-10-04
+ * @version 2021-10-05
  */
 public class WordsCounter implements Runnable {
 	private String fileName;
@@ -52,16 +52,15 @@ public class WordsCounter implements Runnable {
 			throws IOException {
 		TreeMap<String, Integer> result = new TreeMap<String, Integer>();
 		String line = null;
-		String regex = "[^a-zA-Z]+";
 		while ((line = br.readLine()) != null) {
-			String[] splittedLine = line.split(regex);
+			String[] splittedLine = line.split("[^a-zA-Z]+");
 			for (int i = 0; i < splittedLine.length; i++) {
 				String word = splittedLine[i].toLowerCase();
 				if (word.length() == 0) continue;
 				else {}
 				int occurance = 
 					(result.containsKey(word) == true) ? 
-					result.get(word) : 0;
+						result.get(word) : 0;
 				result.put(word, ++occurance);
 			}
 		}

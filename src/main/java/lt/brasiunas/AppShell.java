@@ -8,5 +8,5 @@ import com.vaadin.flow.server.PWA;
  */
 @PWA(name = "My Application", shortName = "My Application")
 public class AppShell implements AppShellConfigurator {
-    
+		private static final long serialVersionUID = -8366953661609701014L;
 }

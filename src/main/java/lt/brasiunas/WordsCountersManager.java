@@ -2,11 +2,10 @@ package lt.brasiunas;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.io.FileReader;
 import java.io.InputStream;
 /**
  * @author Mantas Brasiunas, mantas@brasiunas.lt
- * @version 2021-10-04
+ * @version 2021-10-05
  */
 public class WordsCountersManager {
 	private void shutdownWordsCounters(WordsCounter[] wordsCounters, 
@@ -14,7 +13,7 @@ public class WordsCountersManager {
 		for (int i = 0; i < wordsCounters.length; i++) {
 			while (wordsCounters[i].isFinished() != true) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(100);
 				} catch (InterruptedException ex) {
 					ex.printStackTrace();
 				}

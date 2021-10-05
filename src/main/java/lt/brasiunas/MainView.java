@@ -1,30 +1,25 @@
 package lt.brasiunas;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.router.Route;
-
 import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Set;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
 /**
  * @author Mantas Brasiunas, mantas@brasiunas.lt
- * @version 2021-10-04
+ * @version 2021-10-05
  */
 @Route
 public class MainView extends VerticalLayout {
+	private static final long serialVersionUID = -224778650233417406L;
+	
 	private final int NOTIFICATION_SHOW_MS = 10000;
 	
 	private ArrayList<TextArea> txasWords;
@@ -43,28 +38,28 @@ public class MainView extends VerticalLayout {
 		}
 	}
 	
+	private void addBtnBeginClickListener(MultiFileMemoryBuffer mfmb) {
+		Set<String> fileNamesSet = mfmb.getFiles();
+		int i = 0;
+		int n = fileNamesSet.size();
+		InputStream[] inputStreams = new InputStream[n];
+		for (String fileName : fileNamesSet) {
+			inputStreams[i++] = mfmb.getInputStream(fileName);
+		}
+		WordsCountersManager wcm = new WordsCountersManager();
+		WordsStatistics ws = wcm.countWords(inputStreams);
+		
+		i = 0;
+		for (TextArea txa : txasWords) {
+			txa.setValue(ws.getStatistics(
+				firstLetters[i][0], firstLetters[i][1]));
+			i++;
+		}
+	}
 	private Button createBtnBegin(MultiFileMemoryBuffer mfmb) {
 		Button btnBegin = new Button("Begin counting");
 		if (mfmb != null) {
-			btnBegin.addClickListener(event -> {
-				Set<String> fileNamesSet = mfmb.getFiles();
-				int i = 0;
-				int n = fileNamesSet.size();
-				InputStream[] inputStreams = new InputStream[n];
-				for (String fileName : fileNamesSet) {
-					inputStreams[i++] = mfmb.getInputStream(fileName);
-				}
-				WordsCountersManager wcm = new WordsCountersManager();
-				WordsStatistics ws = wcm.countWords(inputStreams);
-				
-				i = 0;
-				for (TextArea txa : txasWords) {
-					txa.setValue(ws.getStatistics(
-						firstLetters[i][0], firstLetters[i][1]));
-					i++;
-				}
-				
-			});
+			btnBegin.addClickListener(event -> addBtnBeginClickListener(mfmb));
 		} else {
 			Notification.show("""
 				MultiFileMemoryBuffer is not created. 
@@ -103,7 +98,8 @@ public class MainView extends VerticalLayout {
 		/*
 		upload.getElement().addEventListener("file-remove", event -> {
 			System.out.println("Norima pašalinti bylą: " + upload.getElement());
-			System.out.println("Pašalinta byla. Liko: " + mfmb.getFiles().size());
+			System.out.println("Pašalinta byla. Liko: " + 
+				mfmb.getFiles().size());
 		});
 		*/
 		
