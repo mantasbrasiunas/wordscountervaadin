@@ -7,11 +7,8 @@ import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MultiFileBuffer;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.router.Route;
-
-import com.vaadin.flow.server.frontend.installer.DefaultFileDownloader;
 
 import java.io.InputStream;
 
@@ -28,15 +25,14 @@ import java.io.IOException;
  */
 @Route
 public class MainView extends VerticalLayout {
+	private final int NOTIFICATION_SHOW_MS = 10000;
+	
 	private ArrayList<TextArea> txasWords;
-	private Button btnDownloadAll;
-	private ArrayList<Button> btnsDownload;
 	private char[][] firstLetters = { { 'a', 'g'}, { 'h', 'n'}, { 'o', 'u'}, 
 		{ 'v', 'z'} };
 	
 	private void createResultElements() {
 		txasWords = new ArrayList<>();
-        btnsDownload = new ArrayList<>();
         for (int i = 0; i < firstLetters.length; i++) {
 			TextArea txaWords = new TextArea(String.format(
 				"Words frequency [%c-%c]", 
@@ -44,10 +40,6 @@ public class MainView extends VerticalLayout {
 			txaWords.setWidth("100%");
 			txaWords.setHeight("250px");
 			txasWords.add(txaWords);
-			
-			Button btnDownload = new Button("Download file");
-			btnDownload.setEnabled(false);
-			btnsDownload.add(btnDownload);
 		}
 	}
 	
@@ -65,23 +57,20 @@ public class MainView extends VerticalLayout {
 				WordsCountersManager wcm = new WordsCountersManager();
 				WordsStatistics ws = wcm.countWords(inputStreams);
 				
-				btnDownloadAll.setEnabled(true);
-				
 				i = 0;
 				for (TextArea txa : txasWords) {
 					txa.setValue(ws.getStatistics(
 						firstLetters[i][0], firstLetters[i][1]));
 					i++;
 				}
-				for (Button btn : btnsDownload) {
-					btn.setEnabled(true);
-				}
+				
 			});
 		} else {
 			Notification.show("""
 				MultiFileMemoryBuffer is not created. 
 				Won't be able to upload files.
-				Please, correct error in source code.""", 10000,
+				Please, correct error in source code.""", 
+				NOTIFICATION_SHOW_MS,
 				Notification.Position.MIDDLE);
 		}
 		
@@ -89,45 +78,49 @@ public class MainView extends VerticalLayout {
         return btnBegin;
 	}
 	
-	private void addDownloadListeners() {
-		int i = 0;
-		for (Button btn : btnsDownload) {
-			//https://vaadin.com/docs/v8/framework/articles/LettingTheUserDownloadAFile
-			
-			DefaultFileDownloader dfd = new DefaultFileDownloader();
-			/*
-			try (BufferedWriter bw = new BufferedWriter(new FileWriter(
-					String.format("Byla_%c_%c.txt", 
-						firstLetters[i][0], firstLetters[i][1])))) {
-				bw.write("Labas.");
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-			*/
-			
-		}
-	}
-    public MainView() {
-		createResultElements();
-		
-		MultiFileMemoryBuffer mfmb = new MultiFileMemoryBuffer();
-        Button btnBegin = createBtnBegin(mfmb);
+	private Upload createUploadElement(MultiFileMemoryBuffer mfmb,
+			Button btnBegin) {
+		Upload upload = new Upload(mfmb);
+        upload.setAcceptedFileTypes("text/plain");
+        upload.setMaxFileSize(1 * 1024 * 1024); // 1 MB.
         
-        Upload upload = new Upload(mfmb);
-        
-        upload.addFinishedListener(e -> {
+        upload.addFileRejectedListener(event -> {
+			Notification.show("""
+				File was not upload because of file restrictions.""", 
+				NOTIFICATION_SHOW_MS,
+				Notification.Position.TOP_CENTER);
+		});
+        upload.addAllFinishedListener(event -> {
 			btnBegin.setEnabled(true);
 		});
-        
-        btnDownloadAll = new Button("Download all");
-        btnDownloadAll.setEnabled(false);
-        
-        add(upload, btnBegin, btnDownloadAll);
+		
+		upload.getElement().addEventListener("file-remove", event -> {
+			Notification.show("""
+				Removing file here won\'t prevent file from counting.""",
+				NOTIFICATION_SHOW_MS, Notification.Position.TOP_CENTER);
+			
+		});
+		/*
+		upload.getElement().addEventListener("file-remove", event -> {
+			System.out.println("Norima pašalinti bylą: " + upload.getElement());
+			System.out.println("Pašalinta byla. Liko: " + mfmb.getFiles().size());
+		});
+		*/
+		
+		return upload;
+	}
+	
+    public MainView() {
+		createResultElements();
+
+		MultiFileMemoryBuffer mfmb = new MultiFileMemoryBuffer();
+        Button btnBegin = createBtnBegin(mfmb);
+        Upload upload = createUploadElement(mfmb, btnBegin);
+
+        add(upload, btnBegin);
         
         for (int i = 0; i < firstLetters.length; i++) {
-			add(txasWords.get(i), btnsDownload.get(i));
+			add(txasWords.get(i));
 		}
-		
-		addDownloadListeners();
     }
 }

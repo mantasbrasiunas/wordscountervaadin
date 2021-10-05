@@ -99,11 +99,39 @@ public class WordsStatistics {
 		StringBuilder sb = new StringBuilder();
 		for (java.util.Map.Entry<String, Integer> entry :
 				filteredMap.entrySet()) {
+			sb.append(String.format("%s ", entry));
+		}
+		sb.deleteCharAt(sb.length() - 1);
+		return sb.toString();
+	}
+	
+	/*
+	public String getStatistics(char startIncluded, char endIncluded) {
+		TreeMap<String, Integer> filteredMap = wordFrequency
+				.entrySet()
+				.stream()
+				.filter(map -> (
+						(map.getKey().charAt(0) >= startIncluded) && 
+						(map.getKey().charAt(0) <= endIncluded)
+					)
+				)
+				.collect(
+					Collectors.toMap(
+						java.util.Map.Entry::getKey,
+						java.util.Map.Entry::getValue,
+						(v1, v2) -> v1, TreeMap::new
+					)
+				);
+				
+		StringBuilder sb = new StringBuilder();
+		for (java.util.Map.Entry<String, Integer> entry :
+				filteredMap.entrySet()) {
 			sb.append(String.format("%s%n", entry));
 		}
 		sb.deleteCharAt(sb.length() - 1);
 		return sb.toString();
 	}
+	*/
 	
 	@Override
 	public String toString() {
