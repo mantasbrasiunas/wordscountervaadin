@@ -1,0 +1,64 @@
+Solution for assignment „Code assignment for Java developer position“
+Mantas Brasiūnas
+2021-10-05
+
+
+What is done
+    • Created console version of solution.
+    • Created web application version of solution. These bonus objectives 
+      were done:
+        ◦ Develop a web application wit UI.
+        ◦ Upload any number of input files via UI.
+        ◦ Display word count results in UI. Show four lists.
+
+Web application version
+Source code may be found here (solution with bonus objectives): 
+https://bitbucket.org/mantasbrasiunas/wordscountervaadin/src/master/
+
+Command to start aplication: 
+mvn clean package jetty:run
+
+Technologies used:
+    • Java 16.0.2
+    • Vaadin 21.0.1
+    • Maven 3.8.2
+    • Geany 1.37.1
+    • Debian sid
+    • Opera 79.0.4143.50
+    • Vivaldi 4.3.2431.3 snapshot
+
+Known issues:
+    • Can't remove uploaded file from calculations, even X is pressed in Upload 
+      component. You must reload whole web application and reupload all files 
+      if You uploaded wrong file.
+    • Scroll bar won't appear if resizing window.
+
+Limitations and notes:
+    • I put a file size limit is    1 * 1024 * 1024 bytes 
+      (1’048’576 bytes or 1 MB). It can be changed in source code 
+      (MainView.java:80). In more serious application I would put this 
+      limitation in properties file.
+    • Notification is shown for 10 seconds. It can be changed in source code 
+      (MainView.java:23). In more serious application I would put this property 
+      in properties file.
+
+Console application version
+Source code may be found here:
+https://bitbucket.org/mantasbrasiunas/wordscountercli/src/master/
+
+Command to start command line application: 
+mvn exec:java
+
+Technologies used:
+    • Java 16.0.2
+    • Maven 3.8.2
+    • Geany 1.37.1
+    • Debian sid
+
+Notes:
+    • You may write arguments (files names) in pom.xml file.
+
+
+General notes
+    • I know how to use eclipse, but I wanted less help from IDE, because this 
+      is my  first project using Vaadin 21. Before I used Vaadin 14.
